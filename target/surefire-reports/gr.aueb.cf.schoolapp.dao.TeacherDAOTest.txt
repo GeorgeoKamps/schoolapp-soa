@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: gr.aueb.cf.schoolapp.dao.TeacherDAOTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.67 s <<< FAILURE! - in gr.aueb.cf.schoolapp.dao.TeacherDAOTest
+gr.aueb.cf.schoolapp.dao.TeacherDAOTest  Time elapsed: 0.669 s  <<< ERROR!
+java.sql.SQLSyntaxErrorException: Unknown column 'TABLES_SCHEMA' in 'where clause'
+	at gr.aueb.cf.schoolapp.dao.TeacherDAOTest.setupClass(TeacherDAOTest.java:23)
+

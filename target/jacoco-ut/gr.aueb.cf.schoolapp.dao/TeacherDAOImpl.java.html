@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="el"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeacherDAOImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">TeacherDAOTest Coverage Results</a> &gt; <a href="index.source.html" class="el_package">gr.aueb.cf.schoolapp.dao</a> &gt; <span class="el_source">TeacherDAOImpl.java</span></div><h1>TeacherDAOImpl.java</h1><pre class="source lang-java linenums">package gr.aueb.cf.schoolapp.dao;
+
+import gr.aueb.cf.schoolapp.dao.exceptions.TeacherDAOException;
+import gr.aueb.cf.schoolapp.model.Teacher;
+import gr.aueb.cf.schoolapp.service.util.DBUtil;
+
+import javax.swing.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="fc" id="L15">public class TeacherDAOImpl implements ITeacherDAO {</span>
+    @Override
+    public Teacher insert(Teacher teacher) throws TeacherDAOException {
+<span class="nc" id="L18">        String sql = &quot;INSERT INTO TEACHERS (FIRSTNAME, LASTNAME) VALUES (?, ?)&quot;;</span>
+
+<span class="nc" id="L20">        try (Connection connection = DBUtil.getConnection();</span>
+<span class="nc" id="L21">             PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="nc" id="L22">            String firstname = teacher.getFirstname();</span>
+<span class="nc" id="L23">            String lastname = teacher.getLastname();</span>
+
+<span class="nc" id="L25">            ps.setString(1, firstname);</span>
+<span class="nc" id="L26">            ps.setString(2, lastname);</span>
+
+<span class="nc" id="L28">            int n = ps.executeUpdate();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">            if (n &gt;= 1) {</span>
+<span class="nc" id="L30">                JOptionPane.showMessageDialog(null,n+  &quot;rows affected&quot;,&quot;Successful insert&quot;, JOptionPane.PLAIN_MESSAGE );</span>
+<span class="nc" id="L31">                return teacher;</span>
+            } else {
+<span class="nc" id="L33">                return null;</span>
+            }
+<span class="nc bnc" id="L35" title="All 4 branches missed.">        } catch (SQLException e) {</span>
+<span class="nc" id="L36">            e.printStackTrace();</span>
+<span class="nc" id="L37">            throw new TeacherDAOException(&quot;SQL Error in Teacher Insert: &quot; + teacher);</span>
+        }
+
+    }
+
+    @Override
+    public Teacher update(Teacher teacher) throws TeacherDAOException {
+<span class="nc" id="L44">        String sql = &quot;UPDATE TEACHERS SET FIRSTNAME = ?, LASTNAME = ?, WHERE ID = ?&quot;;</span>
+
+<span class="nc" id="L46">        try (Connection connection = DBUtil.getConnection();</span>
+<span class="nc" id="L47">             PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+
+<span class="nc" id="L49">            int id = teacher.getId();</span>
+<span class="nc" id="L50">            String firstname = teacher.getFirstname();</span>
+<span class="nc" id="L51">            String lastname = teacher.getLastname();</span>
+
+<span class="nc" id="L53">            ps.setString(1, firstname);</span>
+<span class="nc" id="L54">            ps.setString(2, lastname);</span>
+<span class="nc" id="L55">            ps.setInt(3, id);</span>
+
+<span class="nc" id="L57">            int n = ps.executeUpdate();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (n &gt;= 1) {</span>
+<span class="nc" id="L59">                JOptionPane.showMessageDialog(null,n+  &quot;rows affected&quot;,&quot;Successful update&quot;, JOptionPane.PLAIN_MESSAGE );</span>
+<span class="nc" id="L60">                return teacher;</span>
+            } else {
+<span class="nc" id="L62">                return null;</span>
+            }
+<span class="nc bnc" id="L64" title="All 4 branches missed.">        } catch (SQLException e) {</span>
+<span class="nc" id="L65">            e.printStackTrace();</span>
+<span class="nc" id="L66">            throw new TeacherDAOException(&quot;SQL Error in Teacher Update: &quot; + teacher);</span>
+        }
+    }
+
+    @Override
+    public void delete(int id) throws TeacherDAOException {
+<span class="nc" id="L72">        String sql = &quot;DELETE FROM TEACHERS WHERE ID =?&quot;;</span>
+
+<span class="nc" id="L74">        try (Connection connection = DBUtil.getConnection();</span>
+<span class="nc" id="L75">            PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+<span class="nc" id="L76">            ps.setInt(1,id);</span>
+
+<span class="nc" id="L78">            int response = JOptionPane.showConfirmDialog(null, &quot;Είστε σίγουρος/η&quot;, &quot;Warning&quot;, JOptionPane.YES_NO_OPTION);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (response == JOptionPane.YES_OPTION) {</span>
+<span class="nc" id="L80">                int n = ps.executeUpdate();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                if (n &gt;= 1) {</span>
+<span class="nc" id="L82">                    JOptionPane.showMessageDialog(null, n+  &quot;rows affected&quot;, &quot;Successful Delete&quot;, JOptionPane.PLAIN_MESSAGE);</span>
+                } else {
+<span class="nc" id="L84">                    JOptionPane.showMessageDialog(null,   &quot; No rows affected&quot;, &quot;Successful Delete&quot;, JOptionPane.ERROR_MESSAGE);</span>
+                }
+            }
+<span class="nc" id="L87">        } catch (SQLException e) {</span>
+<span class="nc" id="L88">            e.printStackTrace();</span>
+<span class="nc" id="L89">            throw new TeacherDAOException(&quot;SQL Error in Teacher Delete with id: &quot; + id);</span>
+<span class="nc" id="L90">        }</span>
+<span class="nc" id="L91">    }</span>
+
+    @Override
+    public List&lt;Teacher&gt; getByLastname(String lastname) throws TeacherDAOException {
+<span class="nc" id="L95">        String sql = &quot;SELECT * FROM TEACHERS WHERE LASTNAME LIKE ?&quot;;</span>
+<span class="nc" id="L96">        List&lt;Teacher&gt; teachers = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L98">        try (Connection connection = DBUtil.getConnection();</span>
+<span class="nc" id="L99">             PreparedStatement ps = connection.prepareStatement(sql);</span>
+        ) {
+            ResultSet rs;
+            //ps.setString(1, Main.getTeachersSearchForm().getLastname() + &quot;%&quot;);
+<span class="nc" id="L103">            ps.setString(1, lastname + &quot;%&quot;);</span>
+<span class="nc" id="L104">            rs = ps.executeQuery();</span>
+
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L107">                Teacher teacher = new Teacher(rs.getInt(&quot;ID&quot;), rs.getString(&quot;FIRSTNAME&quot;), rs.getString(&quot;LASTNAME&quot;));</span>
+<span class="nc" id="L108">                teachers.add(teacher);</span>
+<span class="nc" id="L109">            }</span>
+<span class="nc" id="L110">        } catch (SQLException e1) {</span>
+<span class="nc" id="L111">            e1.printStackTrace();</span>
+<span class="nc" id="L112">        }</span>
+
+<span class="nc" id="L114">        return teachers;</span>
+    }
+
+    @Override
+    public Teacher getById(int id) throws TeacherDAOException {
+<span class="nc" id="L119">        String sql = &quot;SELECT * FROM TEACHERS WHERE ID = ?&quot;;</span>
+<span class="nc" id="L120">        Teacher teacher = null;</span>
+<span class="nc" id="L121">        ResultSet rs = null;</span>
+
+<span class="nc" id="L123">        try ( Connection connection = DBUtil.getConnection();</span>
+<span class="nc" id="L124">              PreparedStatement ps = connection.prepareStatement(sql)) {</span>
+
+<span class="nc" id="L126">            ps.setInt(1, id);</span>
+<span class="nc" id="L127">            rs = ps.executeQuery();</span>
+
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L130">                teacher = new Teacher(rs.getInt(&quot;ID&quot;), rs.getString(&quot;FIRSTNAME&quot;), rs.getString(&quot;LASTNAME&quot;));</span>
+            }
+<span class="nc" id="L132">        } catch (SQLException e) {</span>
+<span class="nc" id="L133">            e.printStackTrace();</span>
+<span class="nc" id="L134">            throw new TeacherDAOException(&quot;SQL error in Teacher Get with id: &quot; +id);</span>
+        } finally {
+            try {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">                if (rs != null) rs.close();</span>
+<span class="nc" id="L138">            } catch (SQLException e1) {</span>
+<span class="nc" id="L139">                e1.printStackTrace();</span>
+<span class="nc" id="L140">            }</span>
+        }
+<span class="nc" id="L142">        return teacher;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
